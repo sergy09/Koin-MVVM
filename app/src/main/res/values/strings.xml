@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Koin MVVM</string>
+    <string name="welcome_message">Welcome to Sergiy\'s Koin MVVM architecture example</string>
+    <string-array name="channel_filter">
+        <item>Default</item>
+        <item>Cinema</item>
+    </string-array>
+</resources>

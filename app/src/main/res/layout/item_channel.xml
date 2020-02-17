@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="120dp"
+    android:orientation="vertical"
+    android:padding="8dp">
+
+    <ImageView
+        android:id="@+id/ivChannelImage"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:importantForAccessibility="no"
+        android:orientation="vertical"
+        android:scaleType="centerCrop" />
+
+    <TextView
+        android:id="@+id/tvChannelName"
+        style="@style/ChannelItemText"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</LinearLayout>
