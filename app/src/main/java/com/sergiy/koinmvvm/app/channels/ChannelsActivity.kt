@@ -1,14 +1,13 @@
 package com.sergiy.koinmvvm.app.channels
 
 import android.os.Bundle
-import android.view.View
-import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.recyclerview.widget.GridLayoutManager
 import com.sergiy.koinmvvm.R
 import com.sergiy.koinmvvm.app.channels.ChannelsViewModel.Category
 import com.sergiy.koinmvvm.app.common.BaseActivity
 import com.sergiy.koinmvvm.app.common.BaseRvAdapter.BaseRvAdapterListener
+import com.sergiy.koinmvvm.app.common.SpinnerListener
 import com.sergiy.koinmvvm.business.model.Channel
 import com.sergiy.koinmvvm.business.model.ChannelList
 import com.sergiy.koinmvvm.utils.ToastUtils.showToast
@@ -28,6 +27,7 @@ class ChannelsActivity : BaseActivity(), BaseRvAdapterListener<Channel> {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_channels)
 
+        viewModel.loader = this
         viewModel.loadChannelList(this::showChannelList, this::showError)
     }
 
@@ -41,18 +41,12 @@ class ChannelsActivity : BaseActivity(), BaseRvAdapterListener<Channel> {
         adapter.listener = this
         rvChannelList?.adapter = adapter
     }
-
     private fun setCategoryFilter() {
-        sCategoryFilter?.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, Category.values().toList())
-        sCategoryFilter?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
-                viewModel.filterByCategory(Category(position), this@ChannelsActivity::showChannelList)
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>) {}
+        sCategoryFilter?.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, Category.getList())
+        sCategoryFilter?.onItemSelectedListener = SpinnerListener { position ->
+            viewModel.filterByCategory(Category(position), this@ChannelsActivity::showChannelList)
         }
     }
-
     private fun showChannelList(channelList: ChannelList?) {
         channelList?.list?.let(adapter::updateList)
     }

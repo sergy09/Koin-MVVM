@@ -5,7 +5,7 @@ import android.os.Bundle
 import androidx.annotation.IdRes
 import androidx.fragment.app.Fragment
 
-open class BaseNavigator {
+abstract class BaseNavigator {
 
     protected fun BaseActivity.goToActivity(intent: Intent) {
         startActivity(intent)

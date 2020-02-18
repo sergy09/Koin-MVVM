@@ -19,7 +19,7 @@ class MockInterceptor(private val context: Context) : Interceptor {
         if (DEBUG) {
             val uri = chain.request().url().uri().toString()
             val responseString = when {
-                uri.endsWith("channels") -> readFileFromAssets(context, "GetChannelList.json")
+                uri.endsWith("channels") -> "GetChannelList.json".readFileFromAssets(context)
                 else -> ""
             }
 
@@ -45,9 +45,9 @@ class MockInterceptor(private val context: Context) : Interceptor {
         }
     }
 
-    private fun readFileFromAssets(context: Context, fileName: String): String {
+    private fun String.readFileFromAssets(context: Context): String {
         try {
-            val input: InputStream = context.assets.open(fileName)
+            val input: InputStream = context.assets.open(this)
             val source: BufferedSource = Okio.buffer(Okio.source(input))
             return source.readByteString().string(Charset.forName("utf-8"))
         } catch (e: IOException) {
@@ -55,4 +55,5 @@ class MockInterceptor(private val context: Context) : Interceptor {
         }
         return ""
     }
+
 }
