@@ -10,7 +10,7 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
 
-class KoinMVVMExample : Application() {
+class KoinMVVM : Application() {
 
     override fun onCreate() {
         super.onCreate()
@@ -21,7 +21,7 @@ class KoinMVVMExample : Application() {
 
     private fun setInjectionConfig() {
         startKoin {
-            androidContext(this@KoinMVVMExample)
+            androidContext(this@KoinMVVM)
             androidLogger()
             modules(
                 listOf(

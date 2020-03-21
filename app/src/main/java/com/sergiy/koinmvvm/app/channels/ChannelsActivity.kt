@@ -6,7 +6,6 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.sergiy.koinmvvm.R
 import com.sergiy.koinmvvm.app.channels.ChannelsViewModel.Category
 import com.sergiy.koinmvvm.app.common.BaseActivity
-import com.sergiy.koinmvvm.app.common.BaseRvAdapter.BaseRvAdapterListener
 import com.sergiy.koinmvvm.app.common.SpinnerListener
 import com.sergiy.koinmvvm.business.model.Channel
 import com.sergiy.koinmvvm.business.model.ChannelList
@@ -14,7 +13,7 @@ import com.sergiy.koinmvvm.utils.ToastUtils.showToast
 import kotlinx.android.synthetic.main.activity_channels.*
 import org.koin.android.scope.currentScope
 
-class ChannelsActivity : BaseActivity(), BaseRvAdapterListener<Channel> {
+class ChannelsActivity : BaseActivity() {
 
     companion object {
         const val CHANNELS_COLUMNS = 4
@@ -33,26 +32,29 @@ class ChannelsActivity : BaseActivity(), BaseRvAdapterListener<Channel> {
 
     override fun onStart() {
         super.onStart()
+        initListeners()
         setRecycleView()
         setCategoryFilter()
     }
+    private fun initListeners() {
+        adapter.listener = { channel ->
+            showToast(this, channel.name)
+            viewModel.updateChannelName(channel, this::showChannelList)
+        }
+        sCategoryFilter?.onItemSelectedListener = SpinnerListener { position ->
+            viewModel.filterByCategory(Category(position), this::showChannelList)
+        }
+    }
     private fun setRecycleView() {
         rvChannelList?.layoutManager = GridLayoutManager(this, CHANNELS_COLUMNS)
-        adapter.listener = this
         rvChannelList?.adapter = adapter
     }
     private fun setCategoryFilter() {
         sCategoryFilter?.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, Category.getList())
-        sCategoryFilter?.onItemSelectedListener = SpinnerListener { position ->
-            viewModel.filterByCategory(Category(position), this@ChannelsActivity::showChannelList)
-        }
     }
-    private fun showChannelList(channelList: ChannelList?) {
-        channelList?.list?.let(adapter::updateList)
-    }
-
-    override fun onItemClick(entity: Channel) {
-        showToast(this, entity.name)
+    private fun showChannelList(channelList: List<Channel>?) {
+        channelList?.let(adapter::updateList)
+        rvChannelList.scrollToPosition(0)
     }
 
 }
